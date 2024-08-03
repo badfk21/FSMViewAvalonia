@@ -8,7 +8,7 @@
      <PublishReadyToRun>false</PublishReadyToRun>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <AssemblyVersion>2.0.0</AssemblyVersion>
+    <AssemblyVersion>2.1.0</AssemblyVersion>
       <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
     <ItemGroup>
