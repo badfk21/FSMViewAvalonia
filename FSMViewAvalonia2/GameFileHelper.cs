@@ -83,7 +83,11 @@ public static class GameFileHelper
         {
             return "";
         }
-        if (Config.config.gamePaths.TryGetValue(info.SteamId, out var path) && Directory.Exists(path))
+        if (Config.config.gamePaths.TryGetValue(info.SteamId, out var path)
+            && Directory.Exists(path)
+            && !Path.GetFileName(path).EndsWith("_data", StringComparison.OrdinalIgnoreCase)
+            && Path.GetFileName(path) != "Managed"
+            )
         {
             return path;
         }
