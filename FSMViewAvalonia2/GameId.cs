@@ -1,11 +1,5 @@
-using System;
 using System.Buffers;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FSMViewAvalonia2;
 public struct GameId
@@ -14,11 +8,11 @@ public struct GameId
     public readonly bool IsNone => string.IsNullOrEmpty(Id);
     public readonly override bool Equals([NotNullWhen(true)] object obj)
     {
-        if(obj is not GameId)
+        if (obj is not GameId)
         {
             return false;
         }
-        var gi = (GameId)obj;
+        var gi = (GameId) obj;
         return gi.Id.Equals(Id);
     }
     public readonly override int GetHashCode() => Id.GetHashCode();
@@ -28,23 +22,23 @@ public struct GameId
     private static string ProcessGameId(string id)
     {
         int i = 0;
-        var bf = ArrayPool<char>.Shared.Rent(id.Length);
+        char[] bf = ArrayPool<char>.Shared.Rent(id.Length);
         for (int j = 0; j < id.Length; j++)
         {
-            var c = id[j];
-            if(c == '-' ||
+            char c = id[j];
+            if (c == '-' ||
                c == ' '
             )
             {
                 continue;
             }
-            if(c >= 'A' && c <= 'Z')
+            if (c >= 'A' && c <= 'Z')
             {
-                c = (char)(c - 'A' + 'a');
+                c = (char) (c - 'A' + 'a');
             }
             bf[i++] = c;
         }
-        var result = new string(bf, 0, i);
+        string result = new string(bf, 0, i);
         ArrayPool<char>.Shared.Return(bf);
         return result;
     }
@@ -77,18 +71,18 @@ public struct GameId
     }
     public static GameId FromPath(string path)
     {
-        var id = GetGameIdFromPath(path);
+        string id = GetGameIdFromPath(path);
         if (id == null)
         {
-            var fp = Path.GetFullPath(path);
-            foreach(var v in GameFileHelper.allGameInfos)
+            string fp = Path.GetFullPath(path);
+            foreach (Context.GameInfo v in GameFileHelper.allGameInfos)
             {
-                var gp = GameFileHelper.FindGamePath(null, true, v).Result;
-                if(string.IsNullOrEmpty(gp))
+                string gp = GameFileHelper.FindGamePath(null, true, v).Result;
+                if (string.IsNullOrEmpty(gp))
                 {
                     continue;
                 }
-                if(fp.StartsWith(
+                if (fp.StartsWith(
                     Path.GetFullPath(gp), StringComparison.OrdinalIgnoreCase
                     ))
                 {

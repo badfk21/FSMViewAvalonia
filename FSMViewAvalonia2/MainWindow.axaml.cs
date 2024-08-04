@@ -43,7 +43,7 @@ public partial class MainWindow : Window
         InitFind();
 
         InitOption();
-        
+
     }
     private void InitOption()
     {
@@ -51,10 +51,11 @@ public partial class MainWindow : Window
         option_includeSharedassets.IsCheckedChanged += (_, ev) => Config.config.option_includeSharedassets =
             option_includeSharedassets.IsChecked ?? false;
         option_currentGame.Items.Clear();
-        foreach (var v in GameFileHelper.allGameInfos)
+        foreach (GameInfo v in GameFileHelper.allGameInfos)
         {
             _ = option_currentGame.Items.Add(v);
         }
+
         option_currentGame.SelectedIndex = GameFileHelper.CurrentGameInfo.Index;
         option_currentGame.SelectionChanged += (_, ev) =>
         {
@@ -89,10 +90,11 @@ public partial class MainWindow : Window
         }
 
         currentFSMData?.Detach();
-        foreach(var v in loadedFsmDatas)
+        foreach (FsmDataInstanceUI v in loadedFsmDatas)
         {
             v?.Detach();
         }
+
         tabItems.Clear();
         loadedFsmDatas.Clear();
         currentFSMData = null;
@@ -106,7 +108,7 @@ public partial class MainWindow : Window
         CleanupWorkshop();
 
 
-        fsmLoader = new(this);
+        fsmLoader = new();
         GC.Collect(2, GCCollectionMode.Forced);
     }
 
@@ -534,7 +536,7 @@ public partial class MainWindow : Window
     public async Task<Grid> CreateSidebarRow(GameContext ctx,
         IActionScriptEntry.PropertyInfo prop, StackPanel panel)
     {
-        
+
         _ = this.TryGetResource("ThemeBackgroundBrush", out object background);
         object rawvalue = prop.RawValue;
         string value = rawvalue.ToString();
@@ -599,7 +601,7 @@ public partial class MainWindow : Window
 
         if (ctx != null)
         {
-            var assemblyProvider = ctx.assemblyProvider;
+            AssemblyProvider assemblyProvider = ctx.assemblyProvider;
 
             if (rawvalue is FsmEnum @enum)
             {
@@ -613,12 +615,12 @@ public partial class MainWindow : Window
                 }
             }
 
-            if(prop.UIHint is not null)
+            if (prop.UIHint is not null)
             {
-                var uiHint = prop.UIHint.Value;
-                if(uiHint == UIHint.Layer)
+                UIHint uiHint = prop.UIHint.Value;
+                if (uiHint == UIHint.Layer)
                 {
-                    if(rawvalue is FsmInt @int && @int.value < 32 && @int.value >= 0)
+                    if (rawvalue is FsmInt @int && @int.value < 32 && @int.value >= 0)
                     {
                         value = ctx.gameManagers.GetAsset(AssetClassID.TagManager)["layers"][0][@int.value].AsString
                             + $"({@int.value})";
@@ -626,6 +628,7 @@ public partial class MainWindow : Window
                 }
             }
         }
+
         if (pptr != null)
         {
             string assetPath = pptr.file;
@@ -771,28 +774,18 @@ public partial class MainWindow : Window
 
     private void CreateAssetsManagerAndLoader()
     {
-        if (fsmLoader == null)
-        {
-            fsmLoader = new FSMLoader(this);
-        }
+        fsmLoader ??= new FSMLoader();
     }
 
     public void UpdateCurrentGame()
     {
-        var isNone = GameFileHelper.CurrentGameInfo.IsNone;
+        bool isNone = GameFileHelper.CurrentGameInfo.IsNone;
         findMenuRoot.IsEnabled = !isNone;
         findInAllScenes.IsEnabled = !isNone;
         openResources.IsEnabled = !isNone;
         openSceneList.IsEnabled = !isNone;
         generateFsmList.IsEnabled = !isNone;
 
-        if (isNone)
-        {
-            Title = "FSMView Avalonia";
-        }
-        else
-        {
-            Title = "FSMView Avalonia for " + GameFileHelper.CurrentGameInfo.Name;
-        }
+        Title = isNone ? "FSMView Avalonia" : "FSMView Avalonia for " + GameFileHelper.CurrentGameInfo.Name;
     }
 }

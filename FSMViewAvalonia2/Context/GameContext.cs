@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using FSMViewAvalonia2.Assets;
 
@@ -85,7 +80,7 @@ public class GameContext
         var assetInfos = new List<AssetInfo>();
         int assetCount = file.AssetInfos.Count;
         AssemblyProvider apr = assemblyProvider;
-        var am = assetsManager;
+        AssetsManager am = assetsManager;
 
         foreach (AssetFileInfo info in file.GetAssetsOfType(AssetClassID.MonoBehaviour))
         {
@@ -201,7 +196,7 @@ public class GameContext
         AssetsFileInstance assetsFile, bool loadAsDep
        )
     {
-        var am = assetsManager;
+        AssetsManager am = assetsManager;
         if (!Config.config.option_enableFSMListCache)
         {
             return GetFSMInfosDirect(assetsFile, loadAsDep);
@@ -228,7 +223,7 @@ public class GameContext
     public List<AssetInfo> LoadAllFSMsFromFile(string path, bool loadAsDep = false, bool forceOnly = false)
     {
         bool isLevel = Path.GetFileNameWithoutExtension(path).StartsWith("level");
-        
+
         AssetsManager am = assetsManager;
         AssetsFileInstance curFile = am.LoadAssetsFile(path, true);
         am.LoadDependencies(curFile);

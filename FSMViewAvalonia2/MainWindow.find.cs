@@ -1,5 +1,3 @@
-using FSMViewAvalonia2.Context;
-
 namespace FSMViewAvalonia2;
 
 public partial class MainWindow
@@ -44,7 +42,7 @@ public partial class MainWindow
             return;
         }
 
-        view.Closed += async (_, _1) =>
+        view.Closed += (_, _1) =>
         {
             LookupTable.FsmItem info = view.selectedAssetInfo;
             if (info is null)
@@ -141,7 +139,7 @@ public partial class MainWindow
                 }
 
                 totalFile = files.Count;
-                var loader = new FSMLoader(this);
+                var loader = new FSMLoader();
                 List<LookupTable.FsmItem> l = result.fsms;
                 foreach (string v in files)
                 {

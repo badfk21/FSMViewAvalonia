@@ -1,21 +1,16 @@
 using FSMViewAvalonia2.Context;
 
 namespace FSMViewAvalonia2;
-public class FsmDataInstanceUI
+public class FsmDataInstanceUI(FsmDataInstance fsm, GameContext ctx)
 {
-    public FsmDataInstance fsm;
+    public FsmDataInstance fsm = fsm;
     public int tabIndex;
     public List<UINode> nodes;
     public Controls canvasControls;
     public Matrix matrix;
-    public List<FsmStateData> states;
-    public GameContext context;
-    public FsmDataInstanceUI(FsmDataInstance fsm, GameContext ctx)
-    {
-        this.fsm = fsm;
-        this.context = ctx;
-        states = fsm.states.Select(x => new FsmStateData(x)).ToList();
-    }
+    public List<FsmStateData> states = fsm.states.Select(x => new FsmStateData(x)).ToList();
+    public GameContext context = ctx;
+
     //To prevent memory leak because Avalonia's bugs
     public void Detach()
     {

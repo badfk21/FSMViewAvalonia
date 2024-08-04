@@ -1,30 +1,22 @@
-using FSMViewAvalonia2.Assets;
 using FSMViewAvalonia2.Context;
-
-using Path = System.IO.Path;
 
 namespace FSMViewAvalonia2;
 
 public class FSMLoader
 {
-    private readonly MainWindow window;
 
-    
     private readonly DefaultGameIsolate<GameContext> gameCtx = new(id => new(GameFileHelper.GetGameInfoFromId(id), id));
     public GameContext CurrentGame => gameCtx.Get(GameFileHelper.CurrentGameId);
-    public FSMLoader(MainWindow window)
-    {
-        this.window = window;
-    }
+
     public List<AssetInfo> LoadAllFSMsFromBundle(string path, bool loadAsDep = false)
     {
-        var ctx = gameCtx.Get(GameId.FromPath(path));
+        GameContext ctx = gameCtx.Get(GameId.FromPath(path));
         return ctx.LoadAllFSMsFromBundle(path, loadAsDep);
     }
 
     public List<AssetInfo> LoadAllFSMsFromFile(string path, bool loadAsDep = false, bool forceOnly = false)
     {
-        var ctx = gameCtx.Get(GameId.FromPath(path));
+        GameContext ctx = gameCtx.Get(GameId.FromPath(path));
 
         return ctx.LoadAllFSMsFromFile(path, loadAsDep, forceOnly);
     }

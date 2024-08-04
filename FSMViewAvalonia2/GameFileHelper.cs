@@ -1,14 +1,12 @@
 using FSMViewAvalonia2.Context;
 
-using MsBox.Avalonia;
-
 using Path = System.IO.Path;
 
 namespace FSMViewAvalonia2;
 
 public static class GameFileHelper
 {
-    
+
 
     private static readonly Dictionary<GameId, GameInfo> id2infoTable = [];
     public static readonly GameInfoCollections allGameInfos;
@@ -16,8 +14,8 @@ public static class GameFileHelper
     {
         get
         {
-            var id = Config.config.currentGame;
-            if(id >= allGameInfos.Count)
+            int id = Config.config.currentGame;
+            if (id >= allGameInfos.Count)
             {
                 id = 0;
                 Config.config.currentGame = id;
@@ -30,7 +28,7 @@ public static class GameFileHelper
     {
         get
         {
-            if(CurrentGameInfo.IsNone)
+            if (CurrentGameInfo.IsNone)
             {
                 return default;
             }
@@ -39,11 +37,11 @@ public static class GameFileHelper
     }
     public static GameInfo GetGameInfoFromId(GameId id)
     {
-        if(id.IsNone)
+        if (id.IsNone)
         {
             return null;
         }
-        if (id2infoTable.TryGetValue(id, out var result))
+        if (id2infoTable.TryGetValue(id, out GameInfo result))
         {
             return result;
         }
@@ -63,12 +61,12 @@ public static class GameFileHelper
             Name = "None",
             SteamId = -1
         });
-        for(int i = 0; i < allGameInfos.Count; i++)
+        for (int i = 0; i < allGameInfos.Count; i++)
         {
-            var info = allGameInfos[i];
+            GameInfo info = allGameInfos[i];
             info.Index = i;
             id2infoTable[GameId.FromName(info.Name)] = info;
-            foreach(var v in info.DataDirs)
+            foreach (string v in info.DataDirs)
             {
                 id2infoTable[GameId.FromName(v)] = info;
             }
@@ -79,11 +77,11 @@ public static class GameFileHelper
     {
         Config.config.gamePaths ??= [];
         info ??= CurrentGameInfo;
-        if(info.IsNone)
+        if (info.IsNone)
         {
             return "";
         }
-        if (Config.config.gamePaths.TryGetValue(info.SteamId, out var path)
+        if (Config.config.gamePaths.TryGetValue(info.SteamId, out string path)
             && Directory.Exists(path)
             && !Path.GetFileName(path).EndsWith("_data", StringComparison.OrdinalIgnoreCase)
             && Path.GetFileName(path) != "Managed"
@@ -179,12 +177,12 @@ public static class GameFileHelper
 
     public static string FindGameFilePath(string file, bool noUI = false, GameInfo info = null)
     {
-        var inMain = Thread.CurrentThread == Program.mainThread;
+        bool inMain = Thread.CurrentThread == Program.mainThread;
         Task<string> task = FindGamePath(null, noUI | inMain, info);
-        var result = task.Result;
+        string result = task.Result;
         if (string.IsNullOrEmpty(result))
         {
-            if(!noUI)
+            if (!noUI)
             {
                 throw new InvalidOperationException();
             }

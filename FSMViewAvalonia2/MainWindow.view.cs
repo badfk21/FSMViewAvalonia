@@ -82,6 +82,6 @@ public partial class MainWindow
         //matrix = Matrix.CreateTranslation(-pos.X, -pos.Y) * matrix;
         return matrix;
     }
-    private static Matrix CreateScaling(Matrix mat, double scaleX, double scaleY, double centerX, double centerY) => new Matrix(scaleX, 0.0, 0.0, scaleY, centerX - (scaleX * centerX), centerY - (scaleY * centerY)) * mat;
+
     #endregion
 }

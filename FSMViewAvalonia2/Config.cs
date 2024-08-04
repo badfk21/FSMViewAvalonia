@@ -1,7 +1,3 @@
-
-
-using System.Xml.Linq;
-
 namespace FSMViewAvalonia2;
 
 internal class Config
